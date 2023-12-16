@@ -44,6 +44,7 @@ texto_postagem = 'Sua Mensagem'
 
 
 
+
 #Encontrar e clicar e preencher campo de email 
 campo_email = driver.find_element(By.XPATH,'//input[@placeholder="Email ou telefone"]')
 campo_email.click()
