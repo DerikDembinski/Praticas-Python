@@ -36,9 +36,10 @@ driver.get('https://facebook.com')
 
 
 #-----------INSIRA SEUS DADOS ABAIXO---------------------->
-email = '6992195212'
-senha = 'fiorino'
-texto_postagem = 'Teste 041'
+email = 'Email/Telefone'
+senha = 'Senha'
+texto_postagem = 'Sua Mensagem'
+#--------------------------------------------------------->
 
 
 
