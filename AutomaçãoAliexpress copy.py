@@ -80,8 +80,8 @@ def inserir_senha(senha):
 
 #---------------DEFINA SEU EMAIL E SENHA--------------------------
 #(OBS USE UMA CONTA REAL - POIS SENÃO O ALI TENTA IR PARA A ABA DE CADASTRO E O TRATAMENTO DE ERRO NÃO ESTA COMPLETO)
-email = 'derikdembinski@outlook.com'
-senha = 'Dragonfly2021@'
+email = ''
+senha = ''
 #-----------------------------------------------------------------
 
 
