@@ -47,7 +47,7 @@ def switch_to_iframe(driver, iframe_id):
     except Exception as e:
         return False  # Retorna False se houver uma exceção ao mudar para o iframe
 
-def inserir_email():
+def inserir_email(email):
     try:
         #Encontrando, clicando e inserindo email no campo de login
         entrada_email = driver.find_element(By.XPATH,'//input[@id="fm-login-id"]')
@@ -70,19 +70,13 @@ def inserir_email():
         click_continuar.click()
         sleep(4)
 
-def inserir_senha():
+def inserir_senha(senha):
     #Encontrando, clicando e inserindo senha no campo de senha
     entrada_senha = driver.find_element(By.XPATH,'//input[@aria-label="Senha"]')
     entrada_senha.click()
     sleep(1)
     digitar_naturalmente(senha,entrada_senha)
     sleep(5)
-
-
-    #Encontrando e clicando no botao de entrar
-    botton_entrar = driver.find_element(By.XPATH,'//button[@aria-label="Entrar"]')
-    botton_entrar.click()
-    sleep(3)
 
 #---------------DEFINA SEU EMAIL E SENHA--------------------------
 #(OBS USE UMA CONTA REAL - POIS SENÃO O ALI TENTA IR PARA A ABA DE CADASTRO E O TRATAMENTO DE ERRO NÃO ESTA COMPLETO)
@@ -119,16 +113,16 @@ sleep(2)
 #-----------------------------------------------------------------
 
 #---------------Clicando e inseririndo email----------------------
-inserir_email()
+inserir_email(email)
 #-----------------------------------------------------------------
 
 
 #---------------Clicando e inseririndo senha----------------------
-inserir_senha()
+inserir_senha(senha)
 #-----------------------------------------------------------------
 
 
-#---------------Clicando em entrar apos inserir as infos----------
+#---------------Clicando em entrar apos inserir asinfos----------
 #Encontrando e clicando no botao de entrar
 botton_entrar = driver.find_element(By.XPATH,'//button[@aria-label="Entrar"]')
 botton_entrar.click()
