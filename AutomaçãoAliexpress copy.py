@@ -8,12 +8,18 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
 import random
 import undetected_chromedriver as uc 
+import re
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.common.exceptions import *
+from selenium.webdriver.support import expected_conditions
 
 
-def digitar_naturalmente(texto,elemento):
-    for letra in texto:
-        elemento.send_keys(letra)
-        sleep(random.randint(1,5)/30)
+#---------------DEFINA SEU EMAIL E SENHA--------------------------
+#(OBS USE UMA CONTA REAL - POIS SENÃO O ALI TENTA IR PARA A ABA DE CADASTRO E O TRATAMENTO DE ERRO NÃO ESTA COMPLETO)
+email = 'Exemplo@outlook.com'
+senha = 'Teste01'
+#-----------------------------------------------------------------
+
 
 def iniciar_driver():
     chrome_options = Options()
@@ -29,14 +35,27 @@ def iniciar_driver():
     })
     driver = webdriver.Chrome(service=ChromeService(
         ChromeDriverManager().install()), options=chrome_options)
+    wait = WebDriverWait(
+        driver,
+        10,
+        poll_frequency=1,
+        ignored_exceptions=[
+            NoSuchElementException,
+            ElementNotVisibleException,
+            ElementNotSelectableException,
+        ]
+    )
+    return driver, wait
 
-    return driver
+def digitar_naturalmente(texto,elemento):
+    for letra in texto:
+        elemento.send_keys(letra)
+        sleep(random.randint(1,5)/30)
 
 def fechar_popup():
-    sleep(2)
-    fechar_popup = driver.find_element(By.CLASS_NAME,'pop-close-btn')
+    sleep(1)
+    fechar_popup = wait.until(expected_conditions.visibility_of_element_located((By.CLASS_NAME, 'pop-close-btn')))
     fechar_popup.click()
-    sleep(2)
 
 def switch_to_iframe(driver, iframe_id):
     try:
@@ -50,44 +69,43 @@ def switch_to_iframe(driver, iframe_id):
 def inserir_email(email):
     try:
         #Encontrando, clicando e inserindo email no campo de login
-        entrada_email = driver.find_element(By.XPATH,'//input[@id="fm-login-id"]')
+        entrada_email = wait.until(expected_conditions.visibility_of_element_located((By.XPATH,'//input[@id="fm-login-id"]')))
         entrada_email.click()
         sleep(1)
         digitar_naturalmente(email,entrada_email)
-        sleep(3)
+        sleep(1)
     except:
-        campo_email_2 = driver.find_element(By.XPATH,'//input[@class="cosmos-input"]')
+        campo_email_2 = wait.until(expected_conditions.visibility_of_element_located((By.XPATH,'//input[@class="cosmos-input"]')))
         campo_email_2.click()
         sleep(1)
         digitar_naturalmente(email,campo_email_2)
-        sleep(3)
-        clik_intermediario = driver.find_element(By.XPATH,'//span[@class="nfm-multiple-email-prefix"]')
         sleep(1)
+        clik_intermediario = wait.until(expected_conditions.visibility_of_element_located((By.XPATH,'//span[@class="nfm-multiple-email-prefix"]')))
         clik_intermediario.click()
-        sleep(3)
-        click_continuar = driver.find_element(By.XPATH,"//span[text()='Continuar']")
-        sleep(2)
+        sleep(1)
+        click_continuar = wait.until(expected_conditions.visibility_of_element_located((By.XPATH,"//span[text()='Continuar']")))
         click_continuar.click()
-        sleep(4)
+        sleep(1)
 
 def inserir_senha(senha):
     #Encontrando, clicando e inserindo senha no campo de senha
-    entrada_senha = driver.find_element(By.XPATH,'//input[@aria-label="Senha"]')
+    entrada_senha = wait.until(expected_conditions.visibility_of_element_located((By.XPATH,'//input[@aria-label="Senha"]')))
     entrada_senha.click()
     sleep(1)
     digitar_naturalmente(senha,entrada_senha)
-    sleep(5)
+    sleep(3)
 
-#---------------DEFINA SEU EMAIL E SENHA--------------------------
-#(OBS USE UMA CONTA REAL - POIS SENÃO O ALI TENTA IR PARA A ABA DE CADASTRO E O TRATAMENTO DE ERRO NÃO ESTA COMPLETO)
-email = ''
-senha = ''
-#-----------------------------------------------------------------
+def hover_usuario():
+    campo_usuario = wait.until(expected_conditions.visibility_of_element_located((By.CLASS_NAME,'my-account--menuItem--1GDZChA')))
+    campo_usuario.click()
+    sleep(1)
 
 
-#---------------Iniciar o driver----------------------------------
-driver = iniciar_driver()
-#Navegar ate o site
+
+
+
+#---------------Navegar ate o site--------------------------------
+driver, wait = iniciar_driver()
 driver = uc.Chrome()
 driver.get('https://pt.aliexpress.com')
 sleep(1)
@@ -100,16 +118,15 @@ fechar_popup()
 
 
 #---------------Clicando na aba de usuario------------------------
-campo_usuario = driver.find_element(By.CLASS_NAME,'my-account--menuItem--1GDZChA')
-campo_usuario.click()
-sleep(2)
+#Fase 01
+hover_usuario()
 #-----------------------------------------------------------------
 
 
 #---------------Clicando em entrar na conta-----------------------
-campo_entrar_na_conta = driver.find_element(By.CLASS_NAME,'my-account--signin--RiPQVPB')
+campo_entrar_na_conta = wait.until(expected_conditions.visibility_of_element_located((By.CLASS_NAME,'my-account--signin--RiPQVPB')))
 campo_entrar_na_conta.click()
-sleep(2)
+sleep(1)
 #-----------------------------------------------------------------
 
 #---------------Clicando e inseririndo email----------------------
@@ -124,9 +141,9 @@ inserir_senha(senha)
 
 #---------------Clicando em entrar apos inserir asinfos----------
 #Encontrando e clicando no botao de entrar
-botton_entrar = driver.find_element(By.XPATH,'//button[@aria-label="Entrar"]')
+botton_entrar = wait.until(expected_conditions.visibility_of_element_located((By.XPATH,'//button[@aria-label="Entrar"]')))
 botton_entrar.click()
-sleep(3)
+sleep(1)
 #-----------------------------------------------------------------
 
 
@@ -149,10 +166,72 @@ if switch_to_iframe(driver,"baxia-dialog-content") == True:
 fechar_popup()
 #-----------------------------------------------------------------
 
+#---------------Clicando na aba de usuario------------------------
+#Fase 02
+hover_usuario()
+#-----------------------------------------------------------------
+
+
+#---------------Clicando na aba de pedidos------------------------
+lista_hover = wait.until(expected_conditions.visibility_of_all_elements_located((By.XPATH,"//span[@class='my-account--menuText--1km-qni']")))
+lista_hover[0].click()
+#-----------------------------------------------------------------
+
+#---------------Clicando na pedidos enviados----------------------
+elementos_minha_conta = wait.until(expected_conditions.visibility_of_all_elements_located((By.XPATH,'//div[@class="comet-tabs-nav-item"]')))
+elementos_minha_conta[2].click()
+#-----------------------------------------------------------------
+
+
+pedidos_enviados = driver.find_elements(By.XPATH,'//div[@class="order-item"]')
+
+quantidade_pedidos = len(pedidos_enviados)
+
+
+
+
+
+
+
+ids_pedidos = []
+lista_pedidos = []
+for pedido in pedidos_enviados:
+    lista_pedidos.append(pedido.text)
+
+ids_pedidos_produtos = {}
+
+for pedido in lista_pedidos:
+    order_info = pedido 
+    match = re.search(r'ID do pedido: (\d+)', order_info)
+    if match:
+        order_id = match.group(1)
+        ids_pedidos.append(order_id)
+        produto_match = re.search(r'Detalhes do pedido\n([\s\S]*?)\nR\$', order_info)
+    if produto_match:
+        produto_nome = produto_match.group(1).strip()
+
+
+        ids_pedidos_produtos[order_id] = produto_nome
+
+
+
+
+for pedido, produto_nome in ids_pedidos_produtos.items():
+    print("ID do Pedido:", pedido)
+    print("Nome do Produto:", produto_nome)
+    print()
+
+for pedido in ids_pedidos:
+    print(pedido)
+
+
+
+
+
+
 
 
 #Aguardando fim da automação
 sleep(2)
 input('Aguardado para encerrar')
 driver.close()
-
