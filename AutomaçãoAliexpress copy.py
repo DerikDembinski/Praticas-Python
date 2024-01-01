@@ -8,12 +8,23 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
 import random
 import undetected_chromedriver as uc 
+import re
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.common.exceptions import *
+from selenium.webdriver.support import expected_conditions
 
 
-def digitar_naturalmente(texto,elemento):
-    for letra in texto:
-        elemento.send_keys(letra)
-        sleep(random.randint(1,5)/30)
+#---------------DEFINA SEU EMAIL E SENHA--------------------------
+#(OBS USE UMA CONTA REAL - POIS SENÃO O ALI TENTA IR PARA A ABA DE CADASTRO E O TRATAMENTO DE ERRO NÃO ESTA COMPLETO)
+<<<<<<< HEAD
+email = 'Exemplo@outlook.com'
+senha = 'Teste01'
+=======
+email = 'derikdembinski@outlook.com'
+senha = 'Dragonfly2021@'
+>>>>>>> dc31d7844dd62196b3604549b4149c85d6ccc716
+#-----------------------------------------------------------------
+
 
 def iniciar_driver():
     chrome_options = Options()
